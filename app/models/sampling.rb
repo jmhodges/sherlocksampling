@@ -43,11 +43,18 @@ class Sampling < ActiveRecord::Base
       count = c.bugs.count
       num_duplicates += c.duplicate_bugs.count
       numerator *= count
-      num_bugs_found += count
+      num_bugs_found += count - num_bugs_found
     end
     
-    self.total_bug_estimate = numerator.to_f / num_duplicates.to_f
-    self.missing_bug_estimate = total_bug_estimate - num_bugs_found
+    if numerator != 0 && num_duplicates != 0
+      self.total_bug_estimate = numerator.to_f / num_duplicates.to_f
+      self.missing_bug_estimate = total_bug_estimate - num_bugs_found
+    else
+      # One reviewer found zero bugs, so we can't make any estimates.
+      # Or there were no duplicate bugs found.
+      self.total_bug_estimate = nil
+      self.missing_bug_estimate = nil
+    end
     
     return [total_bug_estimate, missing_bug_estimate]
   end

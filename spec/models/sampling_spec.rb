@@ -33,7 +33,6 @@ describe Sampling do
     @sampling.save
     @sampling.should_not be_completed
     @sampling.should be_incomplete
-    @sampling.destroy # Clean up
   end
   
   it "should be complete when told to be completed and its Captures are complete" do
@@ -57,6 +56,31 @@ describe Sampling do
     @sampling.captures[0].bugs.create
     @sampling.captures[1].bugs.create
     @sampling.captures[1].bugs.create(:duplicate => @sampling.captures[0].bugs[0])
+    
     @sampling.estimate_bug_counts
+    
+    @sampling.total_bug_estimate.should eql(2)
+    @sampling.missing_bug_estimate.should eql(0)
+  end
+  
+  it "should refuse to estimate the number of bugs properly if one reviewer found zero (0) bugs" do
+    @sampling.captures[1].bugs.create
+    @sampling.captures[1].bugs.create
+    
+    @sampling.estimate_bug_counts
+    
+    @sampling.total_bug_estimate.should be_nil
+    @sampling.missing_bug_estimate.should be_nil
+  end
+  
+  it "should refuse to estimate the number of bugs properly if there were no duplicates" do
+    @sampling.captures[0].bugs.create
+    @sampling.captures[1].bugs.create
+    @sampling.captures[1].bugs.create
+    
+    @sampling.estimate_bug_counts
+    
+    @sampling.total_bug_estimate.should be_nil
+    @sampling.missing_bug_estimate.should be_nil
   end
 end
