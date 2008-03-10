@@ -18,14 +18,65 @@ task :default => :spec
 Author = "Jeff Hodges"
 
 # The list of files that should be ignored by git.
-IgnoredFiles = [ "config/database.yml", 
-                 "log/*.log",
-                 "log/*.pid",
-                 "db/*.sqlite3"
-                ]
+IgnoredFiles = [ 
+  "config/database.yml", 
+  "log/*.log",
+  "log/*.pid",
+  "db/*.sqlite3"
+]
 
+# The list of gems that can't be simply copied into vendor/gems
+HardGems = [ 
+  ["sqlite3-ruby", "1.2.1"],
+  ["mysql"]
+]
+    
 desc "Set up the local copy of sherlocksampling for development."
-task :setup => :add_ignored_files_to_git
+task :setup => [:check_for_hard_gems, :add_ignored_files_to_git, "db:create", "db:schema:load"]
+
+desc "Check for the hard gems to install."
+task :check_for_hard_gems do
+  not_installed = []
+  gems = Gem::SourceIndex.from_installed_gems
+  
+  HardGems.each do |g|
+    if gems.search(g[0], g[1]).empty?
+      not_installed << g
+    end
+  end
+  
+  if not_installed.empty?
+    puts "All necessary gems installed."
+  else
+    puts "You still need to install these gems:"
+    not_installed.each do |g|
+      if g[1]
+        puts "\t#{g[0]} -v #{g[1]}"
+      else
+        puts "\t#{g[0]}"
+      end
+    end
+    puts "You can install them easily by running `rake install_hard_gems`"
+    exit 1
+  end
+end
+
+desc "Install the gems that can't be simply copied into vendor/gems. Probably, needs to be run as root."
+task :install_hard_gems do
+  HardGems.map do |g|
+    gems = Gem::SourceIndex.from_installed_gems 
+    # Stolen liberally from http://blog.labnotes.org/2008/02/28/svn-checkout-rake-setup/
+    if gems.search(g[0], g[1]).empty?
+      begin 
+        require 'rubygems/dependency_installer'
+        Gem::DependencyInstaller.new(g[0], g[1]).install
+      rescue LoadError # < rubygems 1.0.1
+        require 'rubygems/remote_installer'
+        Gem::RemoteInstaller.new.install(dep.name, dep.version_requirements)
+      end
+    end
+  end
+end
 
 desc "Tell git to ignore files that we really shouldn't be tracking."
 task :add_ignored_files_to_git do
@@ -46,9 +97,13 @@ task :add_ignored_files_to_git do
       already_ignored.include? fn
     }
     
-    puts "Adding ignored files to .git/exclude/info."
-    ignored_files.each do |fn|
-      f.write(fn+"\n")
+    if ignored_files.empty?
+      puts "All ignored files are in .git/exclude/info already. Way to go! Yay!"
+    else
+      puts "Adding ignored files to .git/exclude/info."
+      ignored_files.each do |fn|
+        f.write(fn+"\n")
+      end
     end
   end
 end
