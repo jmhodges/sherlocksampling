@@ -32,7 +32,7 @@ HardGems = [
 ]
     
 desc "Set up the local copy of sherlocksampling for development."
-task :setup => [:add_ignored_files_to_git, :check_for_hard_gems, "db:create", "db:schema:load"]
+task :setup => [:add_ignored_files, :check_for_hard_gems, "db:create", "db:schema:load"]
 
 desc "Check for the hard gems to install."
 task :check_for_hard_gems do
@@ -107,6 +107,25 @@ task :add_ignored_files_to_git do
     end
   end
 end
+
+desc "Tell svn to ignore files that we really shouldn't be tracking."
+task :add_ignored_files_to_svn do
+  puts "Adding ingored files to svn."
+  IgnoredFiles.each do |f|
+    `svn ignore #{f}`
+  end
+end
+
+desc "Tell the versioning system to ignore files we really shouldn't be tracking."
+task :add_ignored_files do
+  if File.exist? '.git'
+    Rake.application.lookup(:add_ignored_files_to_git).invoke
+  elsif File.exist? '.svn'
+    Rake.application.lookup(:add_ignored_files_to_svn).invoke
+  end
+end
+
+
 
 GPLStatement =<<EOS
 # sherlocksampling estimates the number of bugs left in a piece of code.
