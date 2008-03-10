@@ -1,6 +1,6 @@
 class Sampling < ActiveRecord::Base
   validates_presence_of :uuid, :on => :save, :message => "can't be blank"
-  
+  validates_length_of :captures, :is => 2, :on => :save, :message => "must be present"
   has_many :captures
   
   Complete = true;
@@ -15,7 +15,9 @@ class Sampling < ActiveRecord::Base
   end
   
   def completed!
-    self.completed = Complete
+    unless captures.blank? || captures.any?(&:incomplete?)
+      self.completed = Complete
+    end
   end
   
   def incomplete?

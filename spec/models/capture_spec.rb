@@ -13,6 +13,7 @@ describe Capture do
     @capture.should be_initial
     @capture.save
     @capture.should be_initial
+    @capture.should be_incomplete
     @capture.destroy # Clean up
   end
   
@@ -25,5 +26,6 @@ describe Capture do
     @capture.drafted!
     @capture.should be_draft
     @capture.should be_drafted
+    @capture.should be_incomplete
   end
 end

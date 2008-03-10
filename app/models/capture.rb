@@ -3,7 +3,7 @@ class Capture < ActiveRecord::Base
   
   Initial = 0
   Draft = 1
-  Completed = 2
+  Complete = 2
   
   def initial?
     status == Initial
@@ -20,12 +20,28 @@ class Capture < ActiveRecord::Base
     self.status = Draft
   end
   
+  def complete?
+    completed
+  end
+  
   def completed?
-    status == Completed
+    status == Complete
+  end
+  
+  def complete!
+    completed!
   end
   
   def completed!
-    self.status = Completed
+    self.status = Complete
+  end
+  
+  def incomplete?
+    incompleted?
+  end
+  
+  def incompleted?
+    !completed?
   end
   
 end
