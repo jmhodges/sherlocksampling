@@ -11,6 +11,9 @@ class Bug < ActiveRecord::Base
   belongs_to :duplicate, :class_name => "Bug", :foreign_key => "original_id"
   has_one :original, :class_name => "Bug", :foreign_key => "original_id"
   
+  validates_uniqueness_of :original_id, :on => :save, 
+    :message => "must be unique", 
+    :allow_nil => true
   
   def duplicate?
     # Is a duplicate if it has an original
