@@ -1,8 +1,9 @@
 class Sampling < ActiveRecord::Base
-  validates_presence_of :uuid, :on => :save, :message => "can't be blank"
-  validates_length_of :captures, :is => 2, :on => :save, :message => "must be present"
   has_many :captures, :dependent => :destroy
   has_many :bugs
+  
+  validates_presence_of :uuid, :on => :save, :message => "can't be blank"
+  validates_length_of :captures, :is => 2, :on => :save, :message => "must be present"
   
   Complete = true;
   Incomplete = false;
