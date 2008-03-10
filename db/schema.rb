@@ -15,8 +15,7 @@ ActiveRecord::Schema.define(:version => 5) do
     t.integer  "capture_id"
     t.integer  "line_number"
     t.text     "problem_code"
-    t.integer  "duplicate_of_id"
-    t.integer  "duplicate_id"
+    t.integer  "original_id"
     t.datetime "created_at"
     t.datetime "updated_at"
   end

@@ -8,7 +8,7 @@ class Capture < ActiveRecord::Base
   Complete = 2
   
   def original_bugs
-    bugs.find(:all, :conditions => "duplicate_id IS NULL")
+    bugs.find(:all, :conditions => "original_id IS NULL")
   end
   
   def initial?

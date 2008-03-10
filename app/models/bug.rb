@@ -8,19 +8,16 @@ class Bug < ActiveRecord::Base
   # duplicate? method.
   # Note that a duplicate bug is one that two (or more) reviewers found 
   # and added.
-  belongs_to :duplicate, :class_name => "Bug", :foreign_key => "duplicate_id"
-  has_one :duplicate_of, :class_name => "Bug", :foreign_key => "duplicate_id"
+  belongs_to :duplicate, :class_name => "Bug", :foreign_key => "original_id"
+  has_one :original, :class_name => "Bug", :foreign_key => "original_id"
   
   
   def duplicate?
-    # If the bug is a duplicate, it's duplicate_id will be nil. If it 
-    # is the "original", its duplicate_id will point to another bug.
-    !original? 
+    # Is a duplicate if it has an original
+    original
   end
   
   def original?
-    # This means it has a duplicate Bug, not that it has column called 
-    # duplicate that is set to true.
-    duplicate  
+    !duplicate?
   end
 end
