@@ -1,7 +1,8 @@
 class Capture < ActiveRecord::Base
   belongs_to :sampling
   has_many :bugs, :dependent => :destroy
-  has_many :original_bugs, :class_name => "Bug", :conditions => "original_id IS NULL"
+  has_many :duplicate_bugs, :class_name => "Bug", :conditions => "original_id IS NOT NULL"
+  
   Initial = 0
   Draft = 1
   Complete = 2
@@ -34,7 +35,7 @@ class Capture < ActiveRecord::Base
   end
   
   def completed!
-    self.sampling.gather_bugs_from_captures!
+    self.sampling.estimate_bug_counts
     self.status = Complete
   end
   

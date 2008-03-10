@@ -42,27 +42,10 @@ describe Capture do
     @capture.bugs = [Bug.create, Bug.create, Bug.create(:duplicate => @dup_bug)]
     
     @capture.should have(3).bugs
-    @capture.should have(2).original_bugs
+    @capture.should have(1).duplicate_bugs
     
     # Clean up, just in case
     @capture.bugs.map &:destroy
     @capture.destroy
   end
-  
-  it "should sync all of its original bugs to its Sampling when it is completed" do
-    @capture.save
-    @capture.bugs = [Bug.create]
-    bugs = [Bug.create, Bug.create(:duplicate => @capture.bugs[0])]
-    
-    other_capture = Capture.create(:bugs => bugs, :sampling => @capture.sampling )
-    @sampling.captures = [@capture, other_capture]
-    
-    @capture.completed!
-    
-    @capture.sampling.should have(2).original_bugs
-    @capture.sampling.should have(3).bugs
-    # Clean up
-    other_capture.destroy
-    @capture.destroy
-  end 
 end

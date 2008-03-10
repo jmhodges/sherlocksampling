@@ -53,12 +53,10 @@ describe Sampling do
     @sampling.should_not be_completed
   end
   
-  it "should have only original bugs associated with it" do
+  it "should estimate the number of bugs in total and the number of bugs left to be found correctly" do
     @sampling.captures[0].bugs.create
     @sampling.captures[1].bugs.create
     @sampling.captures[1].bugs.create(:duplicate => @sampling.captures[0].bugs[0])
-    @sampling.gather_bugs_from_captures
-    @sampling.should have(2).original_bugs
-    @sampling.should have(3).bugs
+    @sampling.estimate_bug_counts
   end
 end
