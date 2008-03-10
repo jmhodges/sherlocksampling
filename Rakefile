@@ -32,7 +32,7 @@ HardGems = [
 ]
     
 desc "Set up the local copy of sherlocksampling for development."
-task :setup => [:check_for_hard_gems, :add_ignored_files_to_git, "db:create", "db:schema:load"]
+task :setup => [:add_ignored_files_to_git, :check_for_hard_gems, "db:create", "db:schema:load"]
 
 desc "Check for the hard gems to install."
 task :check_for_hard_gems do
@@ -50,7 +50,7 @@ task :check_for_hard_gems do
   else
     puts "You still need to install these gems:"
     not_installed.each do |g|
-      if g[1]
+      if g[1] # Kludgy, but does the Right Thing.
         puts "\t#{g[0]} -v #{g[1]}"
       else
         puts "\t#{g[0]}"
