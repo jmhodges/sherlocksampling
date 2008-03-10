@@ -1,9 +1,15 @@
 class Capture < ActiveRecord::Base
   belongs_to :sampling
-  
+  has_many :bugs, :dependent => :destroy
+
+  validates_presence_of :sampling, :on => :save, :message => "can't be blank"
   Initial = 0
   Draft = 1
   Complete = 2
+  
+  def original_bugs
+    bugs.find(:all, :conditions => "duplicate_id IS NULL")
+  end
   
   def initial?
     status == Initial
@@ -33,6 +39,7 @@ class Capture < ActiveRecord::Base
   end
   
   def completed!
+    self.sampling.gather_bugs_from_captures!
     self.status = Complete
   end
   

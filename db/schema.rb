@@ -9,7 +9,17 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 4) do
+ActiveRecord::Schema.define(:version => 5) do
+
+  create_table "bugs", :force => true do |t|
+    t.integer  "capture_id"
+    t.integer  "line_number"
+    t.text     "problem_code"
+    t.integer  "duplicate_of_id"
+    t.integer  "duplicate_id"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
 
   create_table "captures", :force => true do |t|
     t.integer  "sampling_id"

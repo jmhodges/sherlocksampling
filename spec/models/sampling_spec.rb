@@ -2,11 +2,17 @@ require File.dirname(__FILE__) + '/../spec_helper'
 
 describe Sampling do
   before(:each) do
-    @sampling = Sampling.new(:uuid => UUID.random_create.to_s)
-    @sampling.captures = [Capture.new, Capture.new]
+    @sampling = Sampling.create(:uuid => UUID.random_create.to_s)
+    @sampling.captures = [Capture.create(:sampling => @sampling), Capture.create(:sampling => @sampling)]
   end
 
+  after(:each) do
+    @sampling.captures.map &:destroy
+    @sampling.destroy
+  end
+  
   it "should be valid" do
+    @sampling.save!
     @sampling.should be_valid
   end
   
@@ -45,5 +51,13 @@ describe Sampling do
   it "should not be completable if any of its Captures are not complete" do
     @sampling.completed!.should_not be_true
     @sampling.should_not be_completed
+  end
+  
+  it "should have only original bugs associated with it" do
+    @sampling.captures[0].bugs.create
+    @sampling.captures[1].bugs.create
+    @sampling.captures[1].bugs.create(:duplicate => @sampling.captures[0].bugs[0])
+    @sampling.gather_bugs_from_captures
+    @sampling.should have(2).bugs
   end
 end
