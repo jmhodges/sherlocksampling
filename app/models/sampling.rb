@@ -65,7 +65,7 @@ class Sampling < ActiveRecord::Base
   end
   
   # Filters
-  def before_create
+  def before_validation
     self.uuid ||= UUID.random_create.to_s
   end
 end

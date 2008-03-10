@@ -23,8 +23,13 @@ describe Sampling do
     @sampling.should_not be_valid
   end
   
-  it "should require a UUID" do
-    Sampling.new.should_not be_valid
+  it "should make a UUID on create" do
+    foo = Sampling.new(:captures => [Capture.new, Capture.new])
+    foo.uuid.should be_nil
+    
+    foo.save
+    
+    foo.uuid.should_not be_nil
   end
   
   it "should be incomplete when new or created" do
