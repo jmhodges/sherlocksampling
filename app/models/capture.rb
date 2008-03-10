@@ -2,7 +2,8 @@ class Capture < ActiveRecord::Base
   belongs_to :sampling
   has_many :bugs, :dependent => :destroy
 
-  validates_presence_of :sampling, :on => :save, :message => "can't be blank"
+  validates_presence_of :sampling_id, :on => :save, :message => "can't be blank"
+  
   Initial = 0
   Draft = 1
   Complete = 2
