@@ -64,4 +64,8 @@ class Sampling < ActiveRecord::Base
     save
   end
   
+  # Filters
+  def before_create
+    self.uuid ||= UUID.random_create.to_s
+  end
 end
