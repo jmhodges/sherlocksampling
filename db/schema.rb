@@ -9,7 +9,16 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 1) do
+ActiveRecord::Schema.define(:version => 2) do
+
+  create_table "captures", :force => true do |t|
+    t.string   "uuid"
+    t.integer  "sampling_id"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
+  add_index "captures", ["uuid"], :name => "index_captures_on_uuid"
 
   create_table "samplings", :force => true do |t|
     t.string   "uuid"
