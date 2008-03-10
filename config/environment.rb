@@ -62,3 +62,5 @@ Rails::Initializer.run do |config|
   end
   
 end
+
+require 'uuidtools'
