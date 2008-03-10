@@ -1,6 +1,7 @@
 class Sampling < ActiveRecord::Base
   has_many :captures, :dependent => :destroy
   has_many :bugs
+  has_many :original_bugs, :class_name => "Bug", :conditions => "original_id IS NULL"
   
   validates_presence_of :uuid, :on => :save, :message => "can't be blank"
   validates_length_of :captures, :is => 2, :on => :save, :message => "must be present"
@@ -36,8 +37,9 @@ class Sampling < ActiveRecord::Base
   
   # Gathers the bugs from captures but ignores duplicates
   def gather_bugs_from_captures
-    # FIXME this be reduced to one SQL statement, but that is early optimization
-    self.bugs = captures.map(&:original_bugs).flatten
+    # FIXME this be reduced to two SQL statement, but that is early optimization
+    self.bugs = captures.map(&:bugs).flatten
+    self.original_bugs = captures.map(&:original_bugs).flatten
   end
   
   def gather_bugs_from_captures!

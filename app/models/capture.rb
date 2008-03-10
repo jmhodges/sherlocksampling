@@ -1,16 +1,10 @@
 class Capture < ActiveRecord::Base
   belongs_to :sampling
   has_many :bugs, :dependent => :destroy
-
-  validates_presence_of :sampling_id, :on => :save, :message => "can't be blank"
-  
+  has_many :original_bugs, :class_name => "Bug", :conditions => "original_id IS NULL"
   Initial = 0
   Draft = 1
   Complete = 2
-  
-  def original_bugs
-    bugs.find(:all, :conditions => "original_id IS NULL")
-  end
   
   def initial?
     status == Initial

@@ -2,8 +2,9 @@ require File.dirname(__FILE__) + '/../spec_helper'
 
 describe Capture do
   before(:each) do
-    @sampling = Sampling.create(:uuid => UUID.random_create.to_s)
-    @capture = Capture.new(:sampling => @sampling)
+    @capture = Capture.new
+    @sampling = Sampling.create(:captures => [@capture, Capture.new])
+    @capture.sampling = @sampling
   end
   
   after(:each) do
@@ -11,6 +12,7 @@ describe Capture do
   end
 
   it "should be valid" do
+    @capture.save!
     @capture.should be_valid
   end
   
@@ -57,6 +59,10 @@ describe Capture do
     
     @capture.completed!
     
-    @capture.sampling.bugs.should have(2).bugs
+    @capture.sampling.should have(2).original_bugs
+    @capture.sampling.should have(3).bugs
+    # Clean up
+    other_capture.destroy
+    @capture.destroy
   end 
 end

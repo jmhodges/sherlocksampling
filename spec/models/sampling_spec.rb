@@ -58,6 +58,7 @@ describe Sampling do
     @sampling.captures[1].bugs.create
     @sampling.captures[1].bugs.create(:duplicate => @sampling.captures[0].bugs[0])
     @sampling.gather_bugs_from_captures
-    @sampling.should have(2).bugs
+    @sampling.should have(2).original_bugs
+    @sampling.should have(3).bugs
   end
 end
