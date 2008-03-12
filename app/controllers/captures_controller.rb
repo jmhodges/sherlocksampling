@@ -23,7 +23,7 @@ class CapturesController < ApplicationController
     end
     
     # We only allow updates to status.
-    params[:capture] = params[:capture].slice(:status)
+    params[:capture].slice!(:status)
     
     if @capture.status == Capture::Complete
       render(:status => 409, 
@@ -36,14 +36,6 @@ class CapturesController < ApplicationController
     else
       render(:status => 400, # FIXME this isn't helpful
         :text => "Whoops, you gave me something bad"
-      ) and return
-    end
-  end
-  
-  def find_sampling
-    unless @sampling = Sampling.find_by_uuid(params[:sampling_id])
-      render(:text => "No working sampling id; no entry.  Sorry, buddy.", 
-        :status => 400
       ) and return
     end
   end

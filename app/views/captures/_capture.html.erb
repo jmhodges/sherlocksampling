@@ -1,18 +1,24 @@
+<p><%= link_to "Add a New Bug", new_sampling_capture_bug_url(@sampling.uuid, capture) %></p>
+
 <% if capture.bugs.blank? %>
 
 <p>No bugs found, yet. Find the reviewer, and have 
 	him <%= link_to "add one", new_sampling_capture_bug_url(@sampling.uuid, capture)%>.</p>
 	
 <% else %>
-<p><%= link_to "Add a New Bug", new_sampling_capture_bug_url(@sampling.uuid, capture) %>
-<dl>
+
+<p><strong>Bugs:</strong></p>
+<dl class="bugs_dict">
 		
 	<% capture.bugs.each do |bug| %>
 	
-	<dt><%= bug.line_number %>:</dt><dd><%= bug.problem_code %></dd>
+	<dt>Line <span id="bug_line_number_<%= bug.id %>"><%= bug.line_number %></span>:</dt>
+	<dd>
+		<blockquote><code id="bug_problem_code_<%= bug.id %>"><%= bug.problem_code %></code></blockquote>
+	</dd>
 	
 	<% end %>
 
 </dl>
-
+<%= link_to "Add a New Bug", new_sampling_capture_bug_url(@sampling.uuid, capture) %></p>
 <% end %>

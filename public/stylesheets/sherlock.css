@@ -2,4 +2,6 @@
 .right_column { float : right; width : 48%; }
 .spacer { clear : both; }
 
-blockquote { background: grey;}
+blockquote { background: lightgrey;}
+.bugs_dict { border: 1px solid green; padding: 2px; margin: 3px;}
+.bugs_dict dd { margin-bottom: 3px;}

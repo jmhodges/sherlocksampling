@@ -52,7 +52,12 @@ describe SamplingsController, "with views integrated" do
   integrate_views
   
   before(:each) do
-    @sampling = mock_model(Sampling, :created_at => Time.now)
+    @sampling = mock_model(Sampling)
+    captures = [mock_model(Capture), mock_model(Capture)]
+    captures.each{|c| c.stub!(:bugs).and_return([]) }
+    @sampling.stub!(:captures).and_return(captures)
+    @sampling.stub!(:description).and_return("foobar.rb, lines 20-30")
+    @sampling.stub!(:uuid).and_return("abc")
   end
   
   it "should respond to show properly" do
