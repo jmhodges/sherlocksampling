@@ -1,3 +1,5 @@
 .left_column { float : left; width : 48%; }
 .right_column { float : right; width : 48%; }
 .spacer { clear : both; }
+
+blockquote { background: grey;}

@@ -1,0 +1,15 @@
+<dl>
+	<% if capture.bugs.blank? %>
+	
+	<p>No bugs found, yet. Find the reviewer, and have 
+		him <%= link_to "add one", new_sampling_capture_bug_url(@sampling.uuid, capture)%>.</p>
+		
+	<% else %>
+	
+	<% capture.bugs.each do |bug| %>
+	
+	<dt><%= bug.line_number %>:</dt><dd><%= bug.problem_code %></dd>
+	
+	<% end %>
+	<% end %>
+</dl>
