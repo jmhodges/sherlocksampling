@@ -32,6 +32,7 @@ ActionController::Routing::Routes.draw do |map|
   map.resources :samplings do |sampling|
     sampling.resources :captures do |capture|
       capture.resources :bugs
+      
     end
   end
   

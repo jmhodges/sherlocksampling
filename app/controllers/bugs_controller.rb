@@ -66,10 +66,10 @@ Sampling #{params[:sampling_id].inspect}"
   end
   # Filters
   def check_bug_params
-    unless params[:bug] 
+    if params[:bug].blank?
       render(:status => 400, 
         :text => "You didn't specify information for the Bug."
-      )
+      ) and return
     end
 
     # Don't let anyone just slide in any old capture_id

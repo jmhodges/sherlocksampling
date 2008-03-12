@@ -11,10 +11,11 @@
 <dl class="bugs_dict">
 		
 	<% capture.bugs.each do |bug| %>
-	
+	  <% @bug = bug %>
 	<dt>Line <span id="bug_line_number_<%= bug.id %>"><%= bug.line_number %></span>:</dt>
 	<dd>
 		<blockquote><code id="bug_problem_code_<%= bug.id %>"><%= bug.problem_code %></code></blockquote>
+		<%= in_place_editor("bug_problem_code_#{bug.id}", :options => "{method: 'put'}", :url => sampling_capture_bug_url(@sampling.uuid, capture, bug))%>
 	</dd>
 	
 	<% end %>
