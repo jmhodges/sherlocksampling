@@ -1,0 +1,10 @@
+<%= link_to "Create a New Code Review", {:action => :new} %>
+<ul>
+	<% if @latest_samplings.blank? %>
+	<li>No Samplings, yet</li>
+	<% else%>
+	<% @latest_samplings.each do |sampling| %>
+	<li><%= link_to sampling.description, sampling_url(sampling.uuid) %>
+	<% end %>
+	<% end %>
+</ul>

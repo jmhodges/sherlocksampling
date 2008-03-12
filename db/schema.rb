@@ -9,7 +9,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 6) do
+ActiveRecord::Schema.define(:version => 7) do
 
   create_table "bugs", :force => true do |t|
     t.integer  "capture_id"
@@ -34,6 +34,7 @@ ActiveRecord::Schema.define(:version => 6) do
     t.boolean  "completed"
     t.integer  "total_bug_estimate"
     t.integer  "missing_bug_estimate"
+    t.text     "description"
   end
 
   add_index "samplings", ["uuid"], :name => "index_samplings_on_uuid"

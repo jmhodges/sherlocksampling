@@ -48,4 +48,6 @@ describe Capture do
     @capture.bugs.map &:destroy
     @capture.destroy
   end
+  
+  it "should be have a way to mail its reviewer"
 end

@@ -1,0 +1,37 @@
+<% first_capture = @sampling.captures.first %>
+<% second_capture = @sampling.captures.last %>
+<p>The code being reviewed is:
+	 <blockquote><%= @sampling.description %></blockquote>
+<p>
+<p>Now play nice.</p>
+
+<ul>
+	<li><%= link_to "First Reviewer Should Go Here", sampling_capture_url(@sampling.uuid, first_capture) %></li>
+	<li><%= link_to "Second Reviewer Should Go Here", sampling_capture_url(@sampling.uuid, second_capture) %></li>
+</ul>
+
+<div>
+<div id="first_capture" class="left_column">
+	<p>Column one: <%= first_capture.created_at %></p>
+	<dl>
+		<% if first_capture.bugs.blank? %>
+		
+		<p>No bugs found, yet. Find the reviewer, and have 
+			him <%= link_to "Add one", new_sampling_capture_bug_url(@sampling.uuid, first_capture)%>.</p>
+			
+		<% else %>
+		
+		<% first_capture.bugs.each do |bug| %>
+		
+		<dt><%= bug.line_number %>:</dt><dd><%= bug.problem_code %></dd>
+		
+		<% end %>
+		<% end %>
+	</dl>
+</div>
+
+<div id="second_capture" class="right_column">
+	Column two: <%= @sampling.captures.last.created_at %>
+</div>
+<div class="spacer"></div>
+</div>

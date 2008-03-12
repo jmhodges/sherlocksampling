@@ -88,4 +88,9 @@ describe Sampling do
     @sampling.total_bug_estimate.should be_nil
     @sampling.missing_bug_estimate.should be_nil
   end
+  
+  it "should not estimate the number of bugs until both Captures are completed"
+  
+  it "should mail the other reviewer when one of the Captures is completed"
+  
 end

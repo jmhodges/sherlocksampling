@@ -1,0 +1,2 @@
+class BugsController < ApplicationController
+end

@@ -1,0 +1,5 @@
+<% form_for(@sampling) do |f| %>
+	<label>Describe the code you're going to review: </label><br />
+	<%= f.text_area :description %><br />
+	<%= submit_tag 'Create' %>
+<% end %>
