@@ -1,7 +1,6 @@
 class CapturesController < ApplicationController
   before_filter :find_sampling
   
-  in_place_edit_for :bug, :problem_code
   def show
     @capture = @sampling.captures.find_by_id(params[:id].to_i)
   end

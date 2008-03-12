@@ -1,24 +1,22 @@
 <% first_capture = @sampling.captures.first %>
 <% second_capture = @sampling.captures.last %>
-<p>The code being reviewed is:
-	 <blockquote><%= @sampling.description %></blockquote>
-<p>
-<p>Now play nice.</p>
-
-<ul>
-	<li><%= link_to "First Reviewer Should Go Here", sampling_capture_url(@sampling.uuid, first_capture) %></li>
-	<li><%= link_to "Second Reviewer Should Go Here", sampling_capture_url(@sampling.uuid, second_capture) %></li>
-</ul>
-
+	
 <div>
-<div id="first_capture" class="left_column" style="background: darkgreen;">
+	<p>The code being reviewed is:</p>
+	 <h2><%= @sampling.description %></h2>
+<p>Now play nice.</p>
+</div>
+
+<div id="capture_colummns">
+<div id="first_capture" class="left_capture">
+	
 	<p>Bugs Found by the First Reviewer:</p>
 	<%= render :partial => first_capture, :object => first_capture %>
 </div>
 
-<div id="second_capture" class="right_column" style="background: blue">
+<div id="second_capture" class="right_capture">
 	<p>Bugs Found by the Second Reviewer:</p>
 	<%= render :partial => second_capture, :object => second_capture %>
 </div>
-<div class="spacer"></div>
+<div class="clear"></div>
 </div>

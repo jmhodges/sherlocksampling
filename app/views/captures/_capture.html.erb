@@ -1,3 +1,4 @@
+<div class="capture_listing">
 <p><%= link_to "Add a New Bug", new_sampling_capture_bug_url(@sampling.uuid, capture) %></p>
 
 <% if capture.bugs.blank? %>
@@ -7,19 +8,20 @@
 	
 <% else %>
 
-<p><strong>Bugs:</strong></p>
-<dl class="bugs_dict">
-		
+<div>
+	<p><strong>Bugs:</strong></p>
 	<% capture.bugs.each do |bug| %>
-	  <% @bug = bug %>
-	<dt>Line <span id="bug_line_number_<%= bug.id %>"><%= bug.line_number %></span>:</dt>
-	<dd>
-		<blockquote><code id="bug_problem_code_<%= bug.id %>"><%= bug.problem_code %></code></blockquote>
-		<%= in_place_editor("bug_problem_code_#{bug.id}", :options => "{method: 'put'}", :url => sampling_capture_bug_url(@sampling.uuid, capture, bug))%>
-	</dd>
+	<div class="bug">Line <strong><span id="bug_line_number_<%= bug.id %>"><%= bug.line_number %></span></strong>:
+		<div class="problem_code">
+			<code>
+				<div id="bug_problem_code_<%= bug.id %>"><%= bug.problem_code %></div>
+			</code>
+		</div>
+		<%= bug_in_place_editor @sampling, capture, bug, :problem_code %>
+	</div>
 	
 	<% end %>
-
-</dl>
+</div>
 <%= link_to "Add a New Bug", new_sampling_capture_bug_url(@sampling.uuid, capture) %></p>
 <% end %>
+</div>

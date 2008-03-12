@@ -31,8 +31,7 @@ ActionController::Routing::Routes.draw do |map|
   
   map.resources :samplings do |sampling|
     sampling.resources :captures do |capture|
-      capture.resources :bugs
-      
+      capture.resources :bugs, :member => {:set_problem_code => :put, :set_line_number => :put}
     end
   end
   

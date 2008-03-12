@@ -1,7 +1,27 @@
-.left_column { float : left; width : 48%; }
-.right_column { float : right; width : 48%; }
-.spacer { clear : both; }
+.left_capture{ 
+	float: left; 
+	width: 48%;
+}
 
-blockquote { background: lightgrey;}
-.bugs_dict { border: 1px solid green; padding: 2px; margin: 3px;}
-.bugs_dict dd { margin-bottom: 3px;}
+.right_capture { 
+	float: right; 
+	width: 48%;
+}
+
+.clear { clear : both; }
+
+.capture_listing {
+	padding: 5px;
+	border: 2px solid darkgrey;
+}
+
+.problem_code { 
+	padding-left: 15px;
+	padding-bottom: 10px;
+}
+
+p { margin: 5px;}
+
+.bug {
+	padding-left: 10px;
+}
