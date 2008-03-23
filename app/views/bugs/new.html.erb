@@ -1,6 +1,12 @@
+<p><%= link_to 'Back to the Capture', sampling_capture_url(@sampling.uuid, @capture) %></p>
+
+<p>
 <% form_for(@bug, :url => sampling_capture_bug_url(@sampling.uuid, @capture, @bug)) do |f| %>
 	<label>Line Number:</label> <%= f.text_field :line_number %><br />
 	<label>Problem Code:</label><br />
 	<%= f.text_area :problem_code %><br />
 	<%= submit_tag "Add Bug" %>
 <% end %>
+</p>
+
+<p><%= link_to 'Back to the Capture', sampling_capture_url(@sampling.uuid, @capture) %></p>
