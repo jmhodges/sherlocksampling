@@ -1,13 +1,18 @@
 class BugsController < ApplicationController
   before_filter :find_sampling, :find_capture
-  before_filter :check_bug_params, :except => [:new, :edit, :delete, :set_problem_code, :set_line_number]
+  before_filter :check_bug_params, :except => [:new, :edit, :delete, :destroy, :set_problem_code, :set_line_number]
   
   def new
     @bug = @capture.bugs.build
   end
   
   def create
-    @bug = @capture.bugs.build(params[:bug])
+    unless params[:bug]
+      flash[:notice] = "You forgot all the info about the damn bug. "
+      redirect_to :back
+    end
+
+    @bug = @capture.bugs.build(params[:bug].slice(:line_number, :problem_code))
 
     if @bug.save
       
@@ -20,9 +25,15 @@ class BugsController < ApplicationController
       end
       
     else
-      render(:status => 400, 
-        :text => "Bug wasn't able to be created. Don't know why."
-      ) and return
+      if request.xhr?
+        render(:status => 400,
+          :text => "Bug wasn't able to be created. Don't know why."
+        ) and return
+      else
+        flash[:notice] = ""
+        @bug.errors.each_full{|e| flash[:notice] += e }
+        redirect_to new_sampling_capture_bug_url(@sampling.uuid, @capture)
+      end
     end
   end
   
@@ -58,7 +69,7 @@ class BugsController < ApplicationController
   end
   
   def destroy
-    
+    render(:text => "Does nothing, yet.")
   end
   
   # Needed for that lame InPlaceEditor
