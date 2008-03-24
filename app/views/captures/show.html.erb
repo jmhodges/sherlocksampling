@@ -2,7 +2,8 @@
 <h1><%= @capture.sampling.description %></h1>
 
 <% if @capture.completed? %>
-<h2>This code review was completed!</h2>
+<p><strong>This code review was completed!</strong> Head <%= link_to 'back to the Sampling', sampling_url(@sampling.uuid) %>!</p>
+
 <% end %>
 
 <%= render :partial => @capture %>
