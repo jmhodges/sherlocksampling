@@ -58,9 +58,11 @@ describe Sampling do
   end
   
   it "should estimate the number of bugs in total and the number of bugs left to be found correctly" do
-    @sampling.captures[0].bugs.create
-    @sampling.captures[1].bugs.create
-    @sampling.captures[1].bugs.create(:duplicate => @sampling.captures[0].bugs[0])
+    @sampling.captures[0].bugs.create(:line_number => 2, :problem_code => "is foo")
+    @sampling.captures[1].bugs.create(:line_number => 3, :problem_code => "bar")
+    @sampling.captures[1].bugs.create(:duplicate => @sampling.captures[0].bugs[0],
+                                      :line_number => 2, :problem_code => "like foo"
+                                      )
     
     @sampling.estimate_bug_counts
     

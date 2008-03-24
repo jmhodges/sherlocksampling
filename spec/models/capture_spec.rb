@@ -37,9 +37,15 @@ describe Capture do
   end
   
   it "should be able to find all of the bugs that are not duplicates" do
-    @dup_bug = Bug.create
+    bt = {:line_number => 2, :problem_code => "is foo"}
+
+    @dup_bug = Bug.create(bt)
     @capture.save
-    @capture.bugs = [Bug.create, Bug.create, Bug.create(:duplicate => @dup_bug)]
+    @capture.bugs = [
+                    Bug.create(:line_number => 3, :problem_code => "f"),
+                    Bug.create(:line_number => 4, :problem_code => "g"),
+                    Bug.create(:line_number => 2, :problem_code => "like foo", :duplicate => @dup_bug)
+                  ]
     
     @capture.should have(3).bugs
     @capture.should have(1).duplicate_bugs
