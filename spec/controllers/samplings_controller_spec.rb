@@ -55,7 +55,12 @@ describe SamplingsController, "with views integrated" do
     @sampling = mock_model(Sampling)
     @sampling.stub!(:completed?).and_return(false)
     captures = [mock_model(Capture), mock_model(Capture)]
-    captures.each{|c| c.stub!(:bugs).and_return([]); c.stub!(:completed?).and_return(true) }
+    captures.each do |c|
+      c.stub!(:bugs).and_return([])
+      c.stub!(:completed?).and_return(true)
+      c.stub!(:incomplete?).and_return(false)
+    end
+
     @sampling.stub!(:captures).and_return(captures)
     @sampling.stub!(:description).and_return("foobar.rb, lines 20-30")
     @sampling.stub!(:uuid).and_return("abc")

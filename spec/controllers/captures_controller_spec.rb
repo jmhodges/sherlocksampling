@@ -4,7 +4,8 @@ describe CapturesController do
 
   before(:each) do
     @capture = mock_model(Capture)
-    @capture.stub!(:completed?).and_return(Capture::Incomplete)
+    @capture.stub!(:completed?).and_return(false)
+    @capture.stub!(:incomplete?).and_return(true)
     @capture.stub!(:id).and_return(1)
     Capture.stub!(:find_by_id).with(1).and_return(@capture)
     
@@ -56,13 +57,16 @@ describe CapturesController do
   end
   
   it "should not allow updates if the Capture is completed" do
-    @capture.stub!(:completed?).and_return(Capture::Complete)
+    @capture.stub!(:completed?).and_return(true)
+    @capture.stub!(:incomplete?).and_return(false)
     capture_params = {"completed" => Capture::Incomplete}
     
     @capture.should_not_receive(:update_attributes).with(capture_params)
     
     post :update, {:sampling_id => @sampling.uuid, :id => @capture.id, :capture => capture_params}
   end
+
+  # it "should mail the other Capture's reviewer when the Capture is completed"
 end
 
 describe CapturesController, "with views integrated" do
@@ -70,7 +74,8 @@ describe CapturesController, "with views integrated" do
 
   before(:each) do
     @capture = mock_model(Capture)
-    @capture.stub!(:completed?).and_return(Capture::Incomplete)
+    @capture.stub!(:completed?).and_return(false)
+    @capture.stub!(:incomplete?).and_return(true)
     @capture.stub!(:id).and_return(1)
     Capture.stub!(:find_by_id).with(1).and_return(@capture)
 
@@ -95,5 +100,4 @@ describe CapturesController, "with views integrated" do
     get :show, {:sampling_id => @sampling.uuid, :id => @capture.id }
     response.should_not have_tag('input#completion_button')
   end
-  # it "should mail the other Capture's reviewer when the Capture is completed"
 end

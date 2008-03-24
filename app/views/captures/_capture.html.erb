@@ -1,5 +1,5 @@
 <div class="capture_listing">
-	<p><%= link_to "Add a New Bug", new_sampling_capture_bug_url(@sampling.uuid, capture), :style => "float: right;" %></p>
+	<p><%= link_to_if capture.incomplete?, "Add a New Bug", new_sampling_capture_bug_url(@sampling.uuid, capture), :style => "float: right;" %></p>
 
 	<% if capture.bugs.blank? %>
 
@@ -16,7 +16,7 @@
 			<div class="bug" id="bug_<%= bug.id %>">
 			  Line <strong><span id="bug_line_number_<%= bug.id %>"><%= bug.line_number %></span></strong>:
 				<small>
-				  <%= link_to "Remove this bug", sampling_capture_bug_url(@sampling.uuid, capture, bug), :method => :delete, :style => "float: right;"%>
+				  <%= link_to_if capture.incomplete?, "Remove this bug", sampling_capture_bug_url(@sampling.uuid, capture, bug), :method => :delete, :style => "float: right;"%>
 				</small>
 
 				<div class="problem_code clear" id="bug_problem_code_<%= bug.id %>">
@@ -28,7 +28,7 @@
 		</div>
 	</div>
 
-	<%= link_to "Add a New Bug", new_sampling_capture_bug_url(@sampling.uuid, capture), :style => "float: right;" %>
+	<%= link_to_if capture.incomplete?, "Add a New Bug", new_sampling_capture_bug_url(@sampling.uuid, capture), :style => "float: right;" %>
 	<div class="clear"></div>
 	<% end %>
 </div>
