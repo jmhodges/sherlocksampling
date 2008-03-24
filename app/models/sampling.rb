@@ -7,30 +7,20 @@ class Sampling < ActiveRecord::Base
   Complete = true;
   Incomplete = false;
   
+  def completed?
+    !captures.blank? && captures.all?(&:complete?)
+  end
+  
   def complete?
     completed? # Defined by the boolean column 'completed'
   end
   
-  def complete!
-    completed!
-  end
-  
-  def completed!
-    unless captures.blank? || captures.any?(&:incomplete?)
-      self.completed = Complete
-    end
-  end
-  
   def incomplete?
-    not self.completed
+    !completed?
   end
   
   def incompleted?
     incomplete?
-  end
-  
-  def incompleted!
-    self.completed = Incomplete
   end
   
   def estimate_bug_counts

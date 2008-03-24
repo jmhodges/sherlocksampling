@@ -40,20 +40,20 @@ describe Sampling do
     @sampling.should be_incomplete
   end
   
-  it "should be complete when told to be completed and its Captures are complete" do
+  it "should be complete when its Captures are complete" do
     @sampling.captures = [Capture.new(:completed => Capture::Complete), Capture.new(:completed => Capture::Complete)]
-    @sampling.completed!
     @sampling.should be_complete
+
+    @sampling.captures = [Capture.new(:completed => Capture::Complete), Capture.new(:completed => Capture::Incomplete)]
+    @sampling.should_not be_complete
   end
   
   it "should not be completable if it does not have any Captures" do
     @sampling.captures = []
-    @sampling.completed!
     @sampling.should_not be_complete
   end
   
   it "should not be completable if any of its Captures are not complete" do
-    @sampling.completed!.should_not be_true
     @sampling.should_not be_completed
   end
   
