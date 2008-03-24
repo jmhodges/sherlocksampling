@@ -20,15 +20,12 @@ class CapturesController < ApplicationController
       redirect_to sampling_capture_url(@sampling.uuid, @capture) and return
     end
     
-    # We only allow updates to status.
-    params[:capture].slice!(:completed)
-    
     if @capture.completed?
       flash[:notice] = "This Capture was already completed and cannot be updated further."
       redirect_to sampling_capture_url(@sampling.uuid, @capture) and return
     end
     
-    if @capture.update_attributes(params[:capture])
+    if params[:capture][:completed] && @capture.completed!
       flash[:good] = "Capture was completed! Go, you!"
       redirect_to sampling_capture_url(@sampling.uuid, @capture) and return
     else

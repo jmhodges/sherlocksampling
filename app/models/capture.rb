@@ -17,6 +17,7 @@ class Capture < ActiveRecord::Base
   def completed!
     self.sampling.estimate_bug_counts
     self.completed = Complete
+    save
   end
   
   def incomplete?

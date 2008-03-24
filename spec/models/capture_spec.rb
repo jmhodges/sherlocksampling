@@ -51,5 +51,10 @@ describe Capture do
     @capture.destroy
   end
   
+  it "should try to have the Sampling calculate the estimate when the Capture is completed." do
+    @sampling.should_receive(:estimate_bug_counts)
+    @capture.completed!
+  end
+
   it "should be have a way to mail its reviewer"
 end

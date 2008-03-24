@@ -6,12 +6,17 @@ describe CapturesController do
     @capture = mock_model(Capture)
     @capture.stub!(:completed?).and_return(false)
     @capture.stub!(:incomplete?).and_return(true)
+    @other_capture = mock_model(Capture)
+    @other_capture.stub!(:completed?).and_return(true)
+    @other_capture.stub!(:completed?).and_return(false)
+
     @capture.stub!(:id).and_return(1)
     Capture.stub!(:find_by_id).with(1).and_return(@capture)
-    
+
     @sampling = mock_model(Sampling, :uuid => 'abc')
     @sampling.stub!(:id).and_return(1)
-    @sampling.stub!(:captures).and_return([mock_model(Capture),@capture])
+
+    @sampling.stub!(:captures).and_return([@other_capture, @capture])
     @sampling.captures.stub!(:find_by_id).with(2).and_return(nil)
     @sampling.captures.stub!(:find_by_id).with(1).and_return(@capture)
     Sampling.stub!(:find_by_uuid).with('abc').and_return(@sampling)
@@ -21,7 +26,7 @@ describe CapturesController do
     post :show, {:sampling_id => @sampling.uuid, :id => @capture.id}
     response.should be_success
     
-    @capture.stub!(:update_attributes).and_return(true)
+    @capture.stub!(:completed!).and_return(true)
     post :update, {:sampling_id => @sampling.uuid, :id => @capture.id, :capture => {}}
     response.should be_redirect # FIXME a "good" redirect!
     
@@ -50,8 +55,9 @@ describe CapturesController do
   it "should allow updates, but only to its completion status" do
     capture_params = {"completed" => Capture::Complete, :sampling_id => 2}
     
-    @capture.should_not_receive(:update_attributes).with(capture_params).and_return(true)
-    @capture.should_receive(:update_attributes).with({"completed" => Capture::Complete}).and_return(true)
+    @capture.should_receive(:completed!)
+    @capture.should_not_receive(:update_attributes)
+    @capture.should_not_receive(:update_attribute)
     
     post :update, {:sampling_id => @sampling.uuid, :id => @capture.id, :capture => capture_params}
   end
@@ -61,10 +67,12 @@ describe CapturesController do
     @capture.stub!(:incomplete?).and_return(false)
     capture_params = {"completed" => Capture::Incomplete}
     
-    @capture.should_not_receive(:update_attributes).with(capture_params)
+    @capture.should_not_receive(:completed!)
     
     post :update, {:sampling_id => @sampling.uuid, :id => @capture.id, :capture => capture_params}
   end
+
+  it "should not set the status to completed if update is called with the Incomplete status"
 
   # it "should mail the other Capture's reviewer when the Capture is completed"
 end
