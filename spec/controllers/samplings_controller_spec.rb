@@ -53,6 +53,7 @@ describe SamplingsController, "with views integrated" do
   
   before(:each) do
     @sampling = mock_model(Sampling)
+    @sampling.stub!(:completed?).and_return(false)
     captures = [mock_model(Capture), mock_model(Capture)]
     captures.each{|c| c.stub!(:bugs).and_return([]) }
     @sampling.stub!(:captures).and_return(captures)

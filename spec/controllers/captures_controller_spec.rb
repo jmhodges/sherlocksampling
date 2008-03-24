@@ -22,7 +22,7 @@ describe CapturesController do
     
     @capture.stub!(:update_attributes).and_return(true)
     post :update, {:sampling_id => @sampling.uuid, :id => @capture.id, :capture => {}}
-    response.should be_success
+    response.should be_redirect # FIXME a "good" redirect!
     
     post :show, {:id => @capture.id}
     response.should_not be_success

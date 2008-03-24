@@ -1,27 +1,35 @@
 <div class="capture_listing">
-<p><%= link_to "Add a New Bug", new_sampling_capture_bug_url(@sampling.uuid, capture) %></p>
+	<p><%= link_to "Add a New Bug", new_sampling_capture_bug_url(@sampling.uuid, capture), :style => "float: right;" %></p>
 
-<% if capture.bugs.blank? %>
+	<% if capture.bugs.blank? %>
 
-<p>No bugs found, yet. Find the reviewer, and have 
-	him <%= link_to "add one", new_sampling_capture_bug_url(@sampling.uuid, capture)%>.</p>
-	
-<% else %>
+	<p>No bugs found, yet. Find the reviewer, and have
+		him <%= link_to "add one", new_sampling_capture_bug_url(@sampling.uuid, capture)%>.</p>
 
-<div>
-	<p><strong>Bugs:</strong></p>
-	<% capture.bugs.each do |bug| %>
-	<div class="bug">Line <strong><span id="bug_line_number_<%= bug.id %>"><%= bug.line_number %></span></strong>:
-		<div class="problem_code">
-			<code>
-				<div id="bug_problem_code_<%= bug.id %>"><%= bug.problem_code %></div>
-			</code>
+	<% else %>
+
+	<div>
+		<p><strong>Bugs:</strong></p>
+		<div class="bug_list">
+		<% capture.bugs.each do |bug| %>
+
+			<div class="bug" id="bug_<%= bug.id %>">
+			  Line <strong><span id="bug_line_number_<%= bug.id %>"><%= bug.line_number %></span></strong>:
+				<small>
+				  <%= link_to "Remove this bug", {:action => :destroy, :controller => :bugs, :id => bug.id, :sampling_id => @sampling.uuid, :capture_id => bug.capture.id}, :style => "float: right;"%>
+				</small>
+
+				<div class="problem_code clear" id="bug_problem_code_<%= bug.id %>">
+						<%= bug.problem_code %>
+				</div>
+
+			</div>
+		<% end %>
 		</div>
-		<%= bug_in_place_editor @sampling, capture, bug, :problem_code %>
 	</div>
-	
+
+	<%= link_to "Add a New Bug", new_sampling_capture_bug_url(@sampling.uuid, capture), :style => "float: right;" %>
+	<div class="clear"></div>
 	<% end %>
 </div>
-<%= link_to "Add a New Bug", new_sampling_capture_bug_url(@sampling.uuid, capture) %></p>
-<% end %>
-</div>
+	<%= button_to "I'm Done!", {:action => :update, :capture => {:status => Capture::Complete} }, :style => "float: right;", :method => :put %>

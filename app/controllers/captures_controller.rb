@@ -5,38 +5,36 @@ class CapturesController < ApplicationController
     @capture = @sampling.captures.find_by_id(params[:id].to_i)
   end
   
-  # Written to only called by Ajax calls
+  # Update only allows updates to the Capture's status
   def update
     @capture = @sampling.captures.find_by_id(params[:id].to_i)
     
     
     unless @capture 
-      render(:status => 404, 
-        :text => "No Capture with id #{params[:id].to_s.inspect} in this Sampling."
-      ) and return
+      flash[:notice] = "No Capture with id #{params[:id].to_s.inspect} in this Sampling."
+      redirect_to sampling_url(@sampling.uuid) and return
     end
     
     unless params[:capture]
-      render(:status => 400, 
-        :text => "You didn't provide any info about the Capture!"
-      ) and return
+      flash[:notice] = "You didn't provide any info about the Capture!"
+      redirect_to sampling_capture_url(@sampling.uuid, @capture) and return
     end
     
     # We only allow updates to status.
     params[:capture].slice!(:status)
     
     if @capture.status == Capture::Complete
-      render(:status => 409, 
-        :text => "This Capture was already completed and cannot be updated further."
-      ) and return
+      flash[:notice] = "This Capture was already completed and cannot be updated further."
+      redirect_to sampling_capture_url(@sampling.uuid, @capture) and return
     end
     
     if @capture.update_attributes(params[:capture])
-      render(:nothing => true)
+      flash[:good] = "Capture was completed! Go, you!"
+      redirect_to sampling_capture_url(@sampling.uuid, @capture) and return
     else
-      render(:status => 400, # FIXME this isn't helpful
-        :text => "Whoops, you gave me something bad"
-      ) and return
+      logger.error("Status change of capture #{@capture.id} to #{params[:capture]} failed.")
+      flash[:notice] = "Welp, something went terrible wrong."
+      redirect_to sampling_capture_url(@sampling.uuid, @capture) and return
     end
   end
 end

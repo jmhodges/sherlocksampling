@@ -11,6 +11,7 @@
 .clear { clear : both; }
 
 .capture_listing {
+	margin-left: 5px;
 	padding: 5px;
 	border: 2px solid darkgrey;
 }
@@ -23,5 +24,14 @@
 p { margin: 5px;}
 
 .bug {
+	padding-top: 5px;
 	padding-left: 10px;
+	border: 2px solid darkgrey;
+	margin-bottom: 5px;
+}
+
+.bug_list {
+	padding-left: 5px;
+	padding-right: 5px;
+	margin-bottom: 10px;
 }

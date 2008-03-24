@@ -1,22 +1,31 @@
 <% first_capture = @sampling.captures.first %>
 <% second_capture = @sampling.captures.last %>
-	
+
 <div>
-	<p>The code being reviewed is:</p>
-	 <h2><%= @sampling.description %></h2>
-<p>Now play nice.</p>
+	 <h1><%= @sampling.description %></h1>
+<p>Send the first reviewer to the <%= link_to "first capture page", sampling_capture_url(@sampling.uuid, second_capture)%>,
+	and the second reviewer to <%= link_to "the other one", sampling_capture_url(@sampling.uuid, second_capture)%>.
+	</p>
 </div>
 
 <div id="capture_colummns">
 <div id="first_capture" class="left_capture">
-	
-	<p>Bugs Found by the First Reviewer:</p>
-	<%= render :partial => first_capture, :object => first_capture %>
+
+	<p>
+		Bugs Found by the First Reviewer <small>(<%= link_to "link to this list", sampling_capture_url(@sampling.uuid, first_capture) %>)</small>
+	</p>
+
+	<% if @sampling.completed? %>
+		<%= render :partial => 'captures/capture', :object => first_capture %>
+	<% end %>
 </div>
 
 <div id="second_capture" class="right_capture">
-	<p>Bugs Found by the Second Reviewer:</p>
-	<%= render :partial => second_capture, :object => second_capture %>
+	<p>Bugs Found by the Second Reviewer <small>(<%= link_to "link to this list", sampling_capture_url(@sampling.uuid, second_capture) %>)</small></p>
+
+	<% if @sampling.completed? %>
+	  <%= render :partial => 'captures/capture', :object => second_capture %>
+	<% end %>
 </div>
 <div class="clear"></div>
 </div>
