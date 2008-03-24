@@ -1,10 +1,18 @@
 <div class="capture_listing">
-	<p><%= link_to_if capture.incomplete?, "Add a New Bug", new_sampling_capture_bug_url(@sampling.uuid, capture), :style => "float: right;" %></p>
+  <% if capture.incomplete? %>
+	<p><%= link_to "Add a New Bug", new_sampling_capture_bug_url(@sampling.uuid, capture), :style => "float: right;" %></p>
+  <% end %>
 
 	<% if capture.bugs.blank? %>
 
-	<p>No bugs found, yet. Find the reviewer, and have
-		yo <%= link_to "add one", new_sampling_capture_bug_url(@sampling.uuid, capture)%>.</p>
+    <% if capture.incomplete? %>
+
+    <p>No bugs found, yet. Have the reviewer
+    <%= link_to "add one", new_sampling_capture_bug_url(@sampling.uuid, capture)%> or tell us this review is done.</p>
+
+    <% else %>
+    <p>Zero bugs found! Crazy!</p>
+    <% end %>
 
 	<% else %>
 
@@ -15,10 +23,11 @@
 
 			<div class="bug" id="bug_<%= bug.id %>">
 			  Line <strong><span id="bug_line_number_<%= bug.id %>"><%= bug.line_number %></span></strong>:
+			  <% if capture.incomplete? %>
 				<small>
-				  <%= link_to_if capture.incomplete?, "Remove this bug", sampling_capture_bug_url(@sampling.uuid, capture, bug), :method => :delete, :style => "float: right;"%>
+				  <%= link_to "Remove this bug", sampling_capture_bug_url(@sampling.uuid, capture, bug), :method => :delete, :style => "float: right;"%>
 				</small>
-
+        <% end %>
 				<div class="problem_code clear" id="bug_problem_code_<%= bug.id %>">
 						<%= bug.problem_code %>
 				</div>
@@ -26,15 +35,19 @@
 			</div>
 		<% end %>
 		</div>
-	</div>
+  </div>
 
-	<%= link_to_if capture.incomplete?, "Add a New Bug", new_sampling_capture_bug_url(@sampling.uuid, capture), :style => "float: right;" %>
+  <% if capture.incomplete? %>
+	<%= link_to "Add a New Bug", new_sampling_capture_bug_url(@sampling.uuid, capture), :style => "float: right;" %>
+	<% end %>
+
 	<div class="clear"></div>
 	<% end %>
 </div>
-  <% unless capture.completed? %>
-	<%= button_to "I'm Done!",
-	  {:action => :update, :capture => {:completed => Capture::Complete} },
-	  :confirm => "You sure you're done? This can't be reverted!",
-	  :style => "float: right;", :method => :put, :id => 'completion_button' %>
-	<% end %>
+
+<% unless capture.completed? %>
+  <%= button_to "I'm Done!",
+    {:action => :update, :capture => {:completed => Capture::Complete} },
+    :confirm => "You sure you're done? This can't be reverted!",
+    :style => "float: right;", :method => :put, :id => 'completion_button' %>
+<% end %>
