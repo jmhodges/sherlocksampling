@@ -1,6 +1,6 @@
 class Capture < ActiveRecord::Base
   belongs_to :sampling
-  has_many :bugs, :dependent => :destroy
+  has_many :bugs, :dependent => :destroy, :order => :line_number
   has_many :duplicate_bugs, :class_name => "Bug", :conditions => "original_id IS NOT NULL"
   
   Incomplete = false
