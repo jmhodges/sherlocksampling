@@ -57,8 +57,8 @@ describe SamplingsController, "with views integrated" do
     captures = [mock_model(Capture), mock_model(Capture)]
     captures.each do |c|
       c.stub!(:bugs).and_return([])
-      c.stub!(:completed?).and_return(true)
-      c.stub!(:incomplete?).and_return(false)
+      c.stub!(:completed?).and_return(false)
+      c.stub!(:incomplete?).and_return(true)
     end
 
     @sampling.stub!(:captures).and_return(captures)
@@ -83,7 +83,7 @@ describe SamplingsController, "with views integrated" do
     get :show, :id => @sampling.uuid
     response.should_not have_tag("div.capture_listing")
 
-    @sampling.stub!(:completed?).and_return(true)
+    @sampling.captures.first.stub!(:completed?).and_return(true)
 
     get :show, :id => @sampling.uuid
     response.should have_tag("div.capture_listing")

@@ -3,7 +3,7 @@
 
 <div>
 	 <h1><%= @sampling.description %></h1>
-<p>Send the first reviewer to the <%= link_to "first capture page", sampling_capture_url(@sampling.uuid, second_capture)%>,
+<p>Send the first reviewer to the <%= link_to "first capture page", sampling_capture_url(@sampling.uuid, first_capture) %>,
 	and the second reviewer to <%= link_to "the other one", sampling_capture_url(@sampling.uuid, second_capture)%>.
 	</p>
 </div>
@@ -11,20 +11,21 @@
 <div id="capture_colummns">
 <div id="first_capture" class="left_capture">
 
-	<p>
-		Bugs Found by the First Reviewer <small>(<%= link_to "link to this list", sampling_capture_url(@sampling.uuid, first_capture) %>)</small>
-	</p>
-
-	<% if @sampling.completed? %>
+	<% if first_capture.completed? %>
+	  <p>Bugs found by the First Reviewer.</p>
 		<%= render :partial => 'captures/capture', :object => first_capture %>
+	<% else %>
+	  <p>The First Reviewer hasn't finished <%= link_to "capturing all of the bugs", sampling_capture_url(@sampling.uuid, first_capture) %> in the code.</p>
 	<% end %>
 </div>
 
 <div id="second_capture" class="right_capture">
-	<p>Bugs Found by the Second Reviewer <small>(<%= link_to "link to this list", sampling_capture_url(@sampling.uuid, second_capture) %>)</small></p>
 
-	<% if @sampling.completed? %>
+	<% if second_capture.completed? %>
+	  <p>Bugs found by the Second Reviewer.</p>
 	  <%= render :partial => 'captures/capture', :object => second_capture %>
+	<% else %>
+	  <p>The Second Reviewer hasn't finished <%= link_to "capturing all of the bugs", sampling_capture_url(@sampling.uuid, second_capture) %> in the code.</p>
 	<% end %>
 </div>
 <div class="clear"></div>
