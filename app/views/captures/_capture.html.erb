@@ -32,4 +32,4 @@
 	<div class="clear"></div>
 	<% end %>
 </div>
-	<%= button_to "I'm Done!", {:action => :update, :capture => {:status => Capture::Complete} }, :style => "float: right;", :method => :put %>
+	<%= button_to "I'm Done!", {:action => :update, :capture => {:completed => Capture::Complete} }, :style => "float: right;", :method => :put %>

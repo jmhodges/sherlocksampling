@@ -4,7 +4,7 @@ describe CapturesController do
 
   before(:each) do
     @capture = mock_model(Capture)
-    @capture.stub!(:status).and_return(Capture::Initial)
+    @capture.stub!(:completed?).and_return(Capture::Incomplete)
     @capture.stub!(:id).and_return(1)
     Capture.stub!(:find_by_id).with(1).and_return(@capture)
     
@@ -46,18 +46,18 @@ describe CapturesController do
     @controller.should respond_to(:update)
   end
   
-  it "should allow updates, but only to its status" do
-    capture_params = {"status" => Capture::Complete, :sampling_id => 2}
+  it "should allow updates, but only to its completion status" do
+    capture_params = {"completed" => Capture::Complete, :sampling_id => 2}
     
     @capture.should_not_receive(:update_attributes).with(capture_params).and_return(true)
-    @capture.should_receive(:update_attributes).with({"status" => Capture::Complete}).and_return(true)
+    @capture.should_receive(:update_attributes).with({"completed" => Capture::Complete}).and_return(true)
     
     post :update, {:sampling_id => @sampling.uuid, :id => @capture.id, :capture => capture_params}
   end
   
   it "should not allow updates if the Capture is completed" do
-    @capture.stub!(:status).and_return(Capture::Complete)
-    capture_params = {"status" => Capture::Initial}
+    @capture.stub!(:completed?).and_return(Capture::Complete)
+    capture_params = {"completed" => Capture::Incomplete}
     
     @capture.should_not_receive(:update_attributes).with(capture_params)
     

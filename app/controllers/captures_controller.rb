@@ -5,7 +5,7 @@ class CapturesController < ApplicationController
     @capture = @sampling.captures.find_by_id(params[:id].to_i)
   end
   
-  # Update only allows updates to the Capture's status
+  # Update only allows updates to the Capture's "completed" status
   def update
     @capture = @sampling.captures.find_by_id(params[:id].to_i)
     
@@ -21,9 +21,9 @@ class CapturesController < ApplicationController
     end
     
     # We only allow updates to status.
-    params[:capture].slice!(:status)
+    params[:capture].slice!(:completed)
     
-    if @capture.status == Capture::Complete
+    if @capture.completed?
       flash[:notice] = "This Capture was already completed and cannot be updated further."
       redirect_to sampling_capture_url(@sampling.uuid, @capture) and return
     end

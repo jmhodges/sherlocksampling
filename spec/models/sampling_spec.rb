@@ -41,7 +41,7 @@ describe Sampling do
   end
   
   it "should be complete when told to be completed and its Captures are complete" do
-    @sampling.captures = [Capture.new(:status => Capture::Complete), Capture.new(:status => Capture::Complete)]
+    @sampling.captures = [Capture.new(:completed => Capture::Complete), Capture.new(:completed => Capture::Complete)]
     @sampling.completed!
     @sampling.should be_complete
   end
