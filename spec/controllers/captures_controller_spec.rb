@@ -63,5 +63,37 @@ describe CapturesController do
     
     post :update, {:sampling_id => @sampling.uuid, :id => @capture.id, :capture => capture_params}
   end
+end
+
+describe CapturesController, "with views integrated" do
+  integrate_views
+
+  before(:each) do
+    @capture = mock_model(Capture)
+    @capture.stub!(:completed?).and_return(Capture::Incomplete)
+    @capture.stub!(:id).and_return(1)
+    Capture.stub!(:find_by_id).with(1).and_return(@capture)
+
+    @sampling = mock_model(Sampling, :uuid => 'abc')
+    @sampling.stub!(:id).and_return(1)
+    @sampling.stub!(:captures).and_return([mock_model(Capture),@capture])
+    @sampling.stub!(:description).and_return("Foobar, lines 10-20.rb")
+    @sampling.captures.stub!(:find_by_id).with(2).and_return(nil)
+    @sampling.captures.stub!(:find_by_id).with(1).and_return(@capture)
+    Sampling.stub!(:find_by_uuid).with('abc').and_return(@sampling)
+
+    @capture.stub!(:sampling).and_return(@sampling)
+    @capture.stub!(:bugs).and_return([])
+  end
+
+  it "should not show the Done button if it has been completed" do
+    get :show, {:sampling_id => @sampling.uuid, :id => @capture.id }
+    response.should have_tag('input#completion_button')
+
+    @capture.stub!(:completed?).and_return(true)
+
+    get :show, {:sampling_id => @sampling.uuid, :id => @capture.id }
+    response.should_not have_tag('input#completion_button')
+  end
   # it "should mail the other Capture's reviewer when the Capture is completed"
 end

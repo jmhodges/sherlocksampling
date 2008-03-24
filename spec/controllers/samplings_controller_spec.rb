@@ -55,23 +55,32 @@ describe SamplingsController, "with views integrated" do
     @sampling = mock_model(Sampling)
     @sampling.stub!(:completed?).and_return(false)
     captures = [mock_model(Capture), mock_model(Capture)]
-    captures.each{|c| c.stub!(:bugs).and_return([]) }
+    captures.each{|c| c.stub!(:bugs).and_return([]); c.stub!(:completed?).and_return(true) }
     @sampling.stub!(:captures).and_return(captures)
     @sampling.stub!(:description).and_return("foobar.rb, lines 20-30")
     @sampling.stub!(:uuid).and_return("abc")
+    Sampling.stub!(:find_by_uuid).with("abc").and_return(@sampling)
   end
-  
+
   it "should respond to show properly" do
-    Sampling.stub!(:find_by_uuid).with("uuid123").and_return(@sampling)
-    
-    get :show, :id => "uuid123"
+    get :show, :id => "abc"
     response.should be_success
   end
-  
+
   it "should have a description textarea in new in HTML" do
     post :new
     response.should have_tag('form') do
       with_tag('textarea')
     end
+  end
+
+  it "should show its Captures only if it is completed" do
+    get :show, :id => @sampling.uuid
+    response.should_not have_tag("div.capture_listing")
+
+    @sampling.stub!(:completed?).and_return(true)
+
+    get :show, :id => @sampling.uuid
+    response.should have_tag("div.capture_listing")
   end
 end

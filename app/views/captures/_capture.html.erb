@@ -4,7 +4,7 @@
 	<% if capture.bugs.blank? %>
 
 	<p>No bugs found, yet. Find the reviewer, and have
-		him <%= link_to "add one", new_sampling_capture_bug_url(@sampling.uuid, capture)%>.</p>
+		yo <%= link_to "add one", new_sampling_capture_bug_url(@sampling.uuid, capture)%>.</p>
 
 	<% else %>
 
@@ -16,7 +16,7 @@
 			<div class="bug" id="bug_<%= bug.id %>">
 			  Line <strong><span id="bug_line_number_<%= bug.id %>"><%= bug.line_number %></span></strong>:
 				<small>
-				  <%= link_to "Remove this bug", {:action => :destroy, :controller => :bugs, :id => bug.id, :sampling_id => @sampling.uuid, :capture_id => bug.capture.id}, :style => "float: right;"%>
+				  <%= link_to "Remove this bug", sampling_capture_bug_url(@sampling.uuid, capture, bug), :method => :delete, :style => "float: right;"%>
 				</small>
 
 				<div class="problem_code clear" id="bug_problem_code_<%= bug.id %>">
@@ -32,9 +32,9 @@
 	<div class="clear"></div>
 	<% end %>
 </div>
-  <% unless @capture.completed? %>
+  <% unless capture.completed? %>
 	<%= button_to "I'm Done!",
 	  {:action => :update, :capture => {:completed => Capture::Complete} },
 	  :confirm => "You sure you're done? This can't be reverted!",
-	  :style => "float: right;", :method => :put %>
+	  :style => "float: right;", :method => :put, :id => 'completion_button' %>
 	<% end %>
