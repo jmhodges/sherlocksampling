@@ -1,1 +1,5 @@
+<p><%= link_to 'Back to the Sampling', sampling_url(@sampling.uuid)%></p>
+<h1><%= @capture.sampling.description %></h1>
+<h2>Status: <%= @capture.status %></h2>
 <%= render :partial => @capture %>
+<p><%= link_to 'Back to the Sampling', sampling_url(@sampling.uuid)%></p>

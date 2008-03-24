@@ -15,6 +15,9 @@ class Bug < ActiveRecord::Base
     :message => "must be unique", 
     :allow_nil => true
   
+  validates_numericality_of :line_number, :on => :save, :message => "can't be blank. "
+  validates_presence_of :problem_code, :on => :save, :message => "can't be blank. "
+
   def duplicate?
     # Is a duplicate if it has an original
     original
