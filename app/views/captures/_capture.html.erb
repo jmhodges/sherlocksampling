@@ -32,7 +32,9 @@
 	<div class="clear"></div>
 	<% end %>
 </div>
+  <% unless @capture.completed? %>
 	<%= button_to "I'm Done!",
 	  {:action => :update, :capture => {:completed => Capture::Complete} },
 	  :confirm => "You sure you're done? This can't be reverted!",
 	  :style => "float: right;", :method => :put %>
+	<% end %>
