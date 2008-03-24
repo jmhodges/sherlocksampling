@@ -86,7 +86,7 @@ describe CapturesController, "with views integrated" do
     @capture.stub!(:bugs).and_return([])
   end
 
-  it "should not show the Done button if it has been completed" do
+  it "should not show the completion button if it has been completed" do
     get :show, {:sampling_id => @sampling.uuid, :id => @capture.id }
     response.should have_tag('input#completion_button')
 
